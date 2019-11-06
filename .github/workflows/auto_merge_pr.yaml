@@ -1,13 +1,22 @@
-name: Auto-merge PR
-# This workflow is triggered on pushes to the repository.
-on: push
+name: PR
+on:
+  pull_request:
+    types: [opened, synchronize]
 
 jobs:
-  build:
-    name: Auto-merge PR
+  ci:
+    name: CI
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    # This job runs on Linux
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+
+  merge-pr:
+    name: auto-merge
+    needs: ci
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
