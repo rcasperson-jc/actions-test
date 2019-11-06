@@ -29,4 +29,3 @@ def create_session(github_token):
 if __name__ == "__main__":
     print("Hello world!")
     sess = create_session(os.environ["GITHUB_TOKEN"])
-    exit(1)
