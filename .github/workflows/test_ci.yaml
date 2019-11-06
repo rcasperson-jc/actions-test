@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    name: Action Test
+    name: CI
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     # This job runs on Linux
