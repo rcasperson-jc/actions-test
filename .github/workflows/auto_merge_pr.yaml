@@ -4,8 +4,7 @@ on: push
 
 jobs:
   build:
-    # Job name is Greeting
-    name: Greeting
+    name: Action Test
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     # This job runs on Linux
