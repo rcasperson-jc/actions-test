@@ -6,8 +6,6 @@ on:
 jobs:
   ci:
     name: CI
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     runs-on: ubuntu-latest
     steps:
       - run: exit 0
@@ -19,9 +17,24 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-      - uses: actions/setup-python@v1
+      - uses: actions/github-script@0.2.0
         with:
-          python-version: '3.7'
-          architecture: 'x64'
-      - run: pip install requests && python github_actions/auto_merge_pull_requests/merge_pr.py
+          github-token: ${{github.token}}
+          script: |
+            github.pulls.merge({owner: "rcasperson-jc", repo: "actions-test", pull_number: 5})
+
+
+#      - name: Comment On New Issues
+#        uses: actions/github@v1.0.0
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          args: comment "Hello World"
+#
+
+#      - uses: actions/checkout@master
+#      - uses: actions/setup-python@v1
+#        with:
+#          python-version: '3.7'
+#          architecture: 'x64'
+#      - run: python github_actions/auto_merge_pull_requests/merge_pr.py
