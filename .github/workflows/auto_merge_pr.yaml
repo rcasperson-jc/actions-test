@@ -10,7 +10,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     runs-on: ubuntu-latest
     steps:
-      - run: exit 0
+      - run: exit 1
 
   merge-pr:
     name: auto-merge
