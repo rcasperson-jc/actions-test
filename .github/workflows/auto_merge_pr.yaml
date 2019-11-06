@@ -4,7 +4,7 @@ on: push
 
 jobs:
   build:
-    name: Action Test
+    name: Auto-merge PR
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     # This job runs on Linux
