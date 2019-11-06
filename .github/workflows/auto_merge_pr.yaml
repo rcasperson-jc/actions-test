@@ -6,11 +6,11 @@ jobs:
   build:
     # Job name is Greeting
     name: Greeting
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     # This job runs on Linux
     runs-on: ubuntu-latest
     steps:
-      - env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/checkout@master
       - uses: actions/setup-python@v1
         with:
