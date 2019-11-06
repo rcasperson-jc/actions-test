@@ -16,4 +16,4 @@ jobs:
         with:
           python-version: '3.7'
           architecture: 'x64'
-      - run: python github_actions/auto_merge_pull_requests/merge_pr.py
+      - run: pip install requestspython github_actions/auto_merge_pull_requests/merge_pr.py
