@@ -23,7 +23,9 @@ jobs:
             github.pulls.get({owner: context.repo.owner, repo: context.repo.repo, pull_number: context.payload.number})
               .then(pr => {
                 // https://developer.github.com/v4/enum/mergestatestatus/
-                if (pr.data.mergeable_state == "clean") {
+                // "unstable" is OK because it means that this check hasn't finished,
+                // which of course is expected.
+                if (["clean", "unstable"].includes(pr.data.mergeable_state)) {
                   github.pulls.merge({owner: context.repo.owner, repo: context.repo.repo, pull_number: context.payload.number});
                 } else {
                   console.log(`
