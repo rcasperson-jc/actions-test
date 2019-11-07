@@ -22,7 +22,7 @@ jobs:
               console.log(prs);
               for (const pr of prs) {
                 const pull_number = pr.number;
-                console.log(`Updating PR #${pull_number}`;
+                console.log(`Updating PR #${pull_number}`);
                 github.pulls.updateBranch({owner, repo, pull_number});
               }
             })
