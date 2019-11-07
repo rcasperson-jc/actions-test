@@ -16,10 +16,10 @@ jobs:
         with:
           github-token: ${{github.token}}
           script: |
-            console.log(context)
             const owner = context.repo.owner;
             const repo = context.repo.repo;
-            const pullNumber = context.payload.number;
+            let pullNumber = context.payload.pull_request.number;
+
             github.pulls.get({owner: owner, repo: repo, pull_number: pullNumber})
               .then(pr => {
                 // https://developer.github.com/v4/enum/mergestatestatus/
@@ -37,6 +37,7 @@ jobs:
                 }
               }
             )
+
   delete-branch:
     name: Delete Branch
     # Only attempt to delete the branch if the PR has been merged
