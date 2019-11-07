@@ -13,14 +13,14 @@ jobs:
         with:
           github-token: ${{github.token}}
           script: |
-            console.log(context.payload)
+            console.log(context.payload.check_suite.pull_requests)
             const owner = context.repo.owner;
             const repo = context.repo.repo;
+            let pullNumber;
             if (context.payload.pull_request) {
-              const pullNumber = context.payload.pull_request.number;
+              pullNumber = context.payload.pull_request.number;
             } else if (context.payload.check_suite) {
-              process.exit(1);
-              const pullNumber = context.payload.check_suite.pull_requests[0].number;
+              pullNumber = context.payload.check_suite.pull_requests[0].number;
             };
 
             github.pulls.get({owner: owner, repo: repo, pull_number: pullNumber})
