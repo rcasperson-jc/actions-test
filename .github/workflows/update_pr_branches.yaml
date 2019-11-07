@@ -25,12 +25,9 @@ jobs:
                 console.log(`Updating PR #${pull_number}`);
                 github.pulls.updateBranch({owner, repo, pull_number});
 
-                const path = ".tmpfile";
-                const message = "Updating a tmpfile to trigger a build
-
-                This is because of https://github.community/t5/GitHub-Actions/Check-Suite-created-by-a-Workflow-doesn-t-complete-even-though/td-p/33390
-                ";
-                const content = pull_number
+                const path = "./.tmpfile";
+                const message = "Updating a tmpfile to trigger a build.";
+                const content = pull_number;
                 github.repos.createOrUpdateFile({owner, repo, path, message, content})
               }
             })
