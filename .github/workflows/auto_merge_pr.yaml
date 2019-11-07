@@ -19,6 +19,7 @@ jobs:
             if (context.payload.pull_request) {
               const pullNumber = context.payload.pull_request.number;
             } else if (context.payload.check_suite) {
+              process.exit(1);
               const pullNumber = context.payload.check_suite.pull_requests[0].number;
             };
 
