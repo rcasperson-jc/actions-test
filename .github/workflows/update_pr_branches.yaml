@@ -17,10 +17,12 @@ jobs:
             let [owner, repo] = context.payload.repository.full_name.split("/");
 
             github.pulls.list({owner, repo})
-            .then(prs => {
+            .then(res => {
+              const prs = res.data;
               console.log(prs);
               for (const pr of prs) {
                 const pull_number = pr.number;
+                console.log(`Updating PR #${pull_number}`;
                 github.pulls.updateBranch({owner, repo, pull_number});
               }
             })
