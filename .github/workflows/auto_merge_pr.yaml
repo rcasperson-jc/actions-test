@@ -4,15 +4,15 @@ on:
     types: [opened, synchronize]
 
 jobs:
-  ci:
-    name: CI
-    runs-on: ubuntu-latest
-    steps:
-      - run: exit 0
+#  ci:
+#    name: CI
+#    runs-on: ubuntu-latest
+#    steps:
+#      - run: exit 0
 
   merge-pr:
     name: auto-merge
-    needs: ci
+#    needs: ci
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     runs-on: ubuntu-latest
@@ -21,8 +21,11 @@ jobs:
         with:
           github-token: ${{github.token}}
           script: |
-            let pull = github.pulls.get({owner: context.repo.owner, repo: context.repo.repo, pull_number: context.payload.number});
-            console.log(pull);
-            github.git.deleteRef({owner: context.repo.owner, repo: context.repo.repo, ref: context});
+            github.pulls.get({owner: context.repo.owner, repo: context.repo.repo, pull_number: context.payload.number})
+            .then(pr => {
+              console.log(pr.data.head.ref);
+              github.git.deleteRef({owner: context.repo.owner, repo: context.repo.repo, ref: `heads/${pr.data.head.ref}`});
+            });
+
 #            github.pulls.merge({owner: context.repo.owner, repo: context.repo.repo, pull_number: context.payload.number})
 
