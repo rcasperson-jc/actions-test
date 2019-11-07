@@ -1,8 +1,9 @@
 name: Auto-merge PR
 on:
+  pull_request:
   pull_request_review:
   check_run:
-    types: [completed, rerequested]
+    types: [completed]
 
 jobs:
   merge-pr:
