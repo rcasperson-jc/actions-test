@@ -27,7 +27,7 @@ jobs:
 
                 const path = ".tmpfile.txt";
                 const message = "Updating a tmpfile to trigger a build.";
-                const content = new Buffer(`For #${pull_number}`).toSring("base64");
+                const content = new Buffer(`For #${pull_number}`).toString("base64");
                 github.repos.createOrUpdateFile({owner, repo, path, message, content})
               }
             })
