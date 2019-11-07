@@ -1,9 +1,0 @@
-name: CI
-on: push
-
-jobs:
-  ci:
-    name: CI
-    runs-on: ubuntu-latest
-    steps:
-      - run: exit 0
