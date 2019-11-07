@@ -21,20 +21,5 @@ jobs:
         with:
           github-token: ${{github.token}}
           script: |
-            github.pulls.merge({owner: "rcasperson-jc", repo: "actions-test", pull_number: 5})
-
-
-#      - name: Comment On New Issues
-#        uses: actions/github@v1.0.0
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        with:
-#          args: comment "Hello World"
-#
-
-#      - uses: actions/checkout@master
-#      - uses: actions/setup-python@v1
-#        with:
-#          python-version: '3.7'
-#          architecture: 'x64'
-#      - run: python github_actions/auto_merge_pull_requests/merge_pr.py
+            github.pulls.merge({owner: context.repo.owner, repo: context.repo.repo, pull_number: 6})
+            github.git.deleteRef({owner: context.repo.owner, repo: context.repo.repo, ref: "dynamic"})
