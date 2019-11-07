@@ -1,7 +1,11 @@
 name: Auto-merge PR
 on:
   pull_request:
-    types: [opened, reopened]
+  pull_request_review:
+  check_run:
+    types: [completed]
+  check_suite:
+    types: [completed]
 
 jobs:
   merge-pr:
@@ -15,36 +19,23 @@ jobs:
             const owner = context.repo.owner;
             const repo = context.repo.repo;
             const pullNumber = context.payload.number;
-
-            setInterval(() => {
-              github.pulls.get({owner: owner, repo: repo, pull_number: pullNumber})
-                .then(pr => {
-                  // https://developer.github.com/v4/enum/mergestatestatus/
-                  // "unstable" is OK because it means that this check hasn't finished,
-                  // which of course is expected.
-                  if (["clean", "unstable"].includes(pr.data.mergeable_state)) {
-                    github.pulls.merge({owner: owner, repo: repo, pull_number: pullNumber}).then(res => {
-                      if (res.status == 200) {
-                        console.log("Succesfully merged the PR!")
-                        process.exit(0)
-                      } else {
-                        console.log("An error occurred during the merge")
-                        process.exit(1)
-                      }
-                    }
-                    );
-                    process.exit(0)
-                  } else {
-                    console.log(`
-                    This PR is not in a mergeable state!
-                    Current state: '${pr.data.mergeable_state}'
-                    See https://developer.github.com/v4/enum/mergestatestatus/ for more details.
-                    `)
-                  }
+            github.pulls.get({owner: owner, repo: repo, pull_number: pullNumber})
+              .then(pr => {
+                // https://developer.github.com/v4/enum/mergestatestatus/
+                // "unstable" is OK because it means that this check hasn't finished,
+                // which of course is expected.
+                if (["clean", "unstable"].includes(pr.data.mergeable_state)) {
+                  github.pulls.merge({owner: owner, repo: repo, pull_number: pullNumber});
+                } else {
+                  console.log(`
+                  This PR is not in a mergeable state!
+                  Current state: '${pr.data.mergeable_state}'
+                  See https://developer.github.com/v4/enum/mergestatestatus/ for more details.
+                  `)
+                  process.exit(1)
                 }
-              )
-            }, 30 * 1000);
-
+              }
+            )
   delete-branch:
     name: Delete Branch
     # Only attempt to delete the branch if the PR has been merged
