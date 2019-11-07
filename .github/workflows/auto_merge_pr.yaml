@@ -18,7 +18,7 @@ jobs:
             const repo = context.repo.repo;
             if (context.payload.pull_request) {
               const pullNumber = context.payload.pull_request.number;
-            } else if (context.check_suite) {
+            } else if (context.payload.check_suite) {
               const pullNumber = context.payload.check_suite.pull_requests[0].number;
             };
 
