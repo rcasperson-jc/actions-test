@@ -13,13 +13,17 @@ jobs:
         with:
           github-token: ${{github.token}}
           script: |
-            console.log(context.payload.check_suite.pull_requests)
             const owner = context.repo.owner;
             const repo = context.repo.repo;
             let pullNumber;
             if (context.payload.pull_request) {
               pullNumber = context.payload.pull_request.number;
             } else if (context.payload.check_suite) {
+              let prs = context.payload.check_suite.pull_requests;
+              if (prs.length == 0) {
+                console.log("No PRs attached to check_suite, so no PRs to merge");
+                process.exit(1);
+              };
               pullNumber = context.payload.check_suite.pull_requests[0].number;
             };
 
