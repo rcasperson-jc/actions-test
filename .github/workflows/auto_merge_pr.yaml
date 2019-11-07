@@ -48,7 +48,11 @@ jobs:
         with:
           github-token: ${{github.token}}
           script: |
-            github.pulls.get({owner: context.repo.owner, repo: context.repo.repo, pull_number: context.payload.number})
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            let pullNumber = context.payload.pull_request.number;
+
+             github.pulls.get({owner: owner, repo: repo, pull_number: pullNumber})
             .then(pr => {
-              github.git.deleteRef({owner: context.repo.owner, repo: context.repo.repo, ref: `heads/${pr.data.head.ref}`});
+              github.git.deleteRef({owner: owner, repo: repo, ref: `heads/${pr.data.head.ref}`});
             });
