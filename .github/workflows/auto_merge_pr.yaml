@@ -1,12 +1,7 @@
 name: Auto-merge PR
 on:
   pull_request:
-  pull_request_review:
-  check_run:
-    types: [completed]
-  check_suite:
-    types: [completed]
-
+    types: [opened]
 
 jobs:
   merge-pr:
@@ -21,23 +16,25 @@ jobs:
             const repo = context.repo.repo;
             const pullNumber = context.payload.number;
 
-            github.pulls.get({owner: owner, repo: repo, pull_number: pullNumber})
-              .then(pr => {
-                // https://developer.github.com/v4/enum/mergestatestatus/
-                // "unstable" is OK because it means that this check hasn't finished,
-                // which of course is expected.
-                if (["clean", "unstable"].includes(pr.data.mergeable_state)) {
-                  github.pulls.merge({owner: owner, repo: repo, pull_number: pullNumber});
-                } else {
-                  console.log(`
-                  This PR is not in a mergeable state!
-                  Current state: '${pr.data.mergeable_state}'
-                  See https://developer.github.com/v4/enum/mergestatestatus/ for more details.
-                  `)
-                  process.exit(1)
+            setTimeout(() => {
+              github.pulls.get({owner: owner, repo: repo, pull_number: pullNumber})
+                .then(pr => {
+                  // https://developer.github.com/v4/enum/mergestatestatus/
+                  // "unstable" is OK because it means that this check hasn't finished,
+                  // which of course is expected.
+                  if (["clean", "unstable"].includes(pr.data.mergeable_state)) {
+                    github.pulls.merge({owner: owner, repo: repo, pull_number: pullNumber});
+                  } else {
+                    console.log(`
+                    This PR is not in a mergeable state!
+                    Current state: '${pr.data.mergeable_state}'
+                    See https://developer.github.com/v4/enum/mergestatestatus/ for more details.
+                    `)
+                    process.exit(1)
+                  }
                 }
-              }
-            )
+              )
+            }, 30 * 1000);
 
   delete-branch:
     name: Delete Branch
