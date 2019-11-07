@@ -1,7 +1,7 @@
 name: Auto-merge PR
 on:
   pull_request:
-    types: [opened]
+    types: [opened, reopened]
 
 jobs:
   merge-pr:
@@ -30,7 +30,6 @@ jobs:
                     Current state: '${pr.data.mergeable_state}'
                     See https://developer.github.com/v4/enum/mergestatestatus/ for more details.
                     `)
-                    process.exit(1)
                   }
                 }
               )
