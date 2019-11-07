@@ -4,7 +4,6 @@ on:
   check_suite:
     types: [completed]
 
-
 jobs:
   merge-pr:
     name: Merge PR
