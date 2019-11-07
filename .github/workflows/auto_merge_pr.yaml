@@ -1,17 +1,16 @@
-name: PR
+name: Auto-merge PR
 on:
   pull_request:
-    types: [opened, synchronize]
   pull_request_review:
-    types: [submitted, edited, dismissed]
   check_run:
     types: [completed]
   check_suite:
     types: [completed]
 
+
 jobs:
   merge-pr:
-    name: Automatically Merge PR
+    name: Merge PR
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@0.2.0
