@@ -1,7 +1,7 @@
 name: PR
 on:
   pull_request:
-    types: [opened, synchronize]
+    types: [opened, synchronize, review_request_removed]
 
 jobs:
   ci:
@@ -12,6 +12,7 @@ jobs:
 
   merge-pr:
     name: Merge PR
+    # Only attempt to merge the PR if CI has passed
     needs: ci
     runs-on: ubuntu-latest
     steps:
@@ -19,10 +20,25 @@ jobs:
         with:
           github-token: ${{github.token}}
           script: |
-            github.pulls.merge({owner: context.repo.owner, repo: context.repo.repo, pull_number: context.payload.number});
+            github.pulls.get({owner: context.repo.owner, repo: context.repo.repo, pull_number: context.payload.number})
+              .then(pr => {
+                // https://developer.github.com/v4/enum/mergestatestatus/
+                if (pr.data.mergeable_state == "clean") {
+                  github.pulls.merge({owner: context.repo.owner, repo: context.repo.repo, pull_number: context.payload.number});
+                } else {
+                  console.log(`
+                  This PR is not in a mergeable state!
+                  Current state: '${pr.data.mergeable_state}'
+                  See https://developer.github.com/v4/enum/mergestatestatus/ for more details.
+                  `)
+                  process.exit(1)
+                }
+              }
+            )
 
   delete-branch:
     name: Delete Branch
+    # Only attempt to delete the branch if the PR has been merged
     needs: merge-pr
     runs-on: ubuntu-latest
     steps:
