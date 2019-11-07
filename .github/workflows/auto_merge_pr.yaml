@@ -23,7 +23,15 @@ jobs:
                   // "unstable" is OK because it means that this check hasn't finished,
                   // which of course is expected.
                   if (["clean", "unstable"].includes(pr.data.mergeable_state)) {
-                    github.pulls.merge({owner: owner, repo: repo, pull_number: pullNumber});
+                    github.pulls.merge({owner: owner, repo: repo, pull_number: pullNumber}).then(res => {
+                      if (res.status == 200) {
+                        process.exit(0)
+                      } else {
+                        console.log("An error occurred during the merge")
+                        process.exit(1)
+                      }
+                    }
+                    );
                     process.exit(0)
                   } else {
                     console.log(`
