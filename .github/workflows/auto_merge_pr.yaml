@@ -1,4 +1,8 @@
 name: Auto-merge PR
+
+# NOTE: The check_suite trigger doesn't work after it is rerun
+# after the branch is automatically updated
+# https://github.community/t5/GitHub-Actions/Check-Suite-created-by-a-Workflow-doesn-t-complete-even-though/td-p/33390
 on:
   pull_request_review:
   check_suite:
