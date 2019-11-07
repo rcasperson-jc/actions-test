@@ -24,6 +24,7 @@ jobs:
                   // which of course is expected.
                   if (["clean", "unstable"].includes(pr.data.mergeable_state)) {
                     github.pulls.merge({owner: owner, repo: repo, pull_number: pullNumber});
+                    process.exit(0)
                   } else {
                     console.log(`
                     This PR is not in a mergeable state!
