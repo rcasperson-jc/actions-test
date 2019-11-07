@@ -11,7 +11,7 @@ jobs:
       - run: exit 0
 
   merge-pr:
-    name: auto-merge
+    name: Merge PR
     needs: ci
     runs-on: ubuntu-latest
     steps:
@@ -19,9 +19,18 @@ jobs:
         with:
           github-token: ${{github.token}}
           script: |
-            github.pulls.merge({owner: context.repo.owner, repo: context.repo.repo, pull_number: context.payload.number})
+            github.pulls.merge({owner: context.repo.owner, repo: context.repo.repo, pull_number: context.payload.number});
+
+  delete-branch:
+    name: Delete Branch
+    needs: merge-pr
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@0.2.0
+        with:
+          github-token: ${{github.token}}
+          script: |
             github.pulls.get({owner: context.repo.owner, repo: context.repo.repo, pull_number: context.payload.number})
             .then(pr => {
-              console.log(pr.data.head.ref);
               github.git.deleteRef({owner: context.repo.owner, repo: context.repo.repo, ref: `heads/${pr.data.head.ref}`});
             });
