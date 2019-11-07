@@ -18,6 +18,7 @@ jobs:
 
             github.pulls.list({owner, repo})
             .then(prs => {
+              console.log(prs);
               for (const pr of prs) {
                 const pull_number = pr.number;
                 github.pulls.updateBranch({owner, repo, pull_number});
