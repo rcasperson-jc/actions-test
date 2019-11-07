@@ -1,8 +1,7 @@
 name: Auto-merge PR
 on:
-  pull_request:
   pull_request_review:
-  check_run:
+  check_suite:
     types: [completed]
 
 jobs:
@@ -31,9 +30,7 @@ jobs:
             github.pulls.get({owner: owner, repo: repo, pull_number: pullNumber})
               .then(pr => {
                 // https://developer.github.com/v4/enum/mergestatestatus/
-                // "unstable" is OK because it means that this check hasn't finished,
-                // which of course is expected.
-                if (["clean", "unstable"].includes(pr.data.mergeable_state)) {
+                if (pr.data.mergeable_state == "clean") {
                   github.pulls.merge({owner: owner, repo: repo, pull_number: pullNumber});
                 } else {
                   console.log(`
