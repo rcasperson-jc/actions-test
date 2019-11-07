@@ -36,7 +36,7 @@ jobs:
                   github.pulls.merge({owner: owner, repo: repo, pull_number: pullNumber});
                 } else {
                   console.log(`
-                  This PR is not in a mergeable state!
+                  PR #${pullNumber} is not in a mergeable state!
                   Current state: '${pr.data.mergeable_state}'
                   See https://developer.github.com/v4/enum/mergestatestatus/ for more details.
                   `)
