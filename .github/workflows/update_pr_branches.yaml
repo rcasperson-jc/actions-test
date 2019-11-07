@@ -27,7 +27,7 @@ jobs:
 
                 const path = ".tmpfile.txt";
                 const message = "Updating a tmpfile to trigger a build.";
-                const content = pull_number;
+                const content = `For #${pull_number}`;
                 github.repos.createOrUpdateFile({owner, repo, path, message, content})
               }
             })
