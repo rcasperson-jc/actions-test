@@ -21,7 +21,7 @@ jobs:
         with:
           github-token: ${{github.token}}
           script: |
-            let pull = github.pulls.merge({owner: context.repo.owner, repo: context.repo.repo, pull_number: context.payload.number});
+            let pull = github.pulls.get({owner: context.repo.owner, repo: context.repo.repo, pull_number: context.payload.number});
             console.log(pull);
             github.git.deleteRef({owner: context.repo.owner, repo: context.repo.repo, ref: context});
 #            github.pulls.merge({owner: context.repo.owner, repo: context.repo.repo, pull_number: context.payload.number})
