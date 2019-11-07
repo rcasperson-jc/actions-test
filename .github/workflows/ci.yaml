@@ -6,4 +6,4 @@ jobs:
     name: CI
     runs-on: ubuntu-latest
     steps:
-      - run: sleep 30 && exit 0
+      - run: exit 0
