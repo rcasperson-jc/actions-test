@@ -25,7 +25,7 @@ jobs:
                 console.log(`Updating PR #${pull_number}`);
                 github.pulls.updateBranch({owner, repo, pull_number});
 
-                const path = "./.tmpfile";
+                const path = "/.tmpfile.txt";
                 const message = "Updating a tmpfile to trigger a build.";
                 const content = pull_number;
                 github.repos.createOrUpdateFile({owner, repo, path, message, content})
