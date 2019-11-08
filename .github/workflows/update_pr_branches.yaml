@@ -1,9 +1,5 @@
 name: Update PR Branches
 on:
-  push:
-    branches:
-      - master
-      - krypton-daily
   pull_request:
     types: [closed]
 
