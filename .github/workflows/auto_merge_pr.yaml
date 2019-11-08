@@ -78,3 +78,26 @@ jobs:
               const ref = `heads/${pr.data.head.ref}`;
               github.git.deleteRef({owner, repo, ref});
             });
+
+  update-prs:
+    name: Update PR Branches
+    # Update other PRs after a PR merges
+    needs: merge-pr
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@0.2.0
+        with:
+          github-token: ${{github.token}}
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+
+            github.pulls.list({owner, repo})
+            .then(res => {
+              const prs = res.data;
+              for (const pr of prs) {
+                const pull_number = pr.number;
+                console.log(`Updating PR #${pull_number}`);
+                github.pulls.updateBranch({owner, repo, pull_number});
+              }
+            })
