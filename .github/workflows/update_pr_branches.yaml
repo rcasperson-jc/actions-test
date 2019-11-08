@@ -4,6 +4,8 @@ on:
     branches:
       - master
       - krypton-daily
+  pull_request:
+    types: [closed]
 
 jobs:
   update-prs:
