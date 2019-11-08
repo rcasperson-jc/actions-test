@@ -1,7 +1,5 @@
 name: Update PR Branches
-on:
-  pull_request:
-    types: [closed]
+on: push
 
 jobs:
   update-prs:
@@ -9,7 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@0.2.0
-        if: github.event.pull_request.merged == true
         with:
           github-token: ${{github.token}}
           script: |
