@@ -19,7 +19,6 @@ jobs:
             github.pulls.list({owner, repo})
             .then(res => {
               const prs = res.data;
-              console.log(prs);
               for (const pr of prs) {
                 const pull_number = pr.number;
                 console.log(`Updating PR #${pull_number}`);
