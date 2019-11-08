@@ -1,5 +1,9 @@
 name: Update PR Branches
-on: push
+on:
+  push:
+    branches:
+      - master
+      - krypton-daily
 
 jobs:
   update-prs:
