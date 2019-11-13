@@ -97,10 +97,13 @@ jobs:
             .then(res => {
               const prs = res.data;
               for (const pr of prs) {
+                const pull_number = pr.number;
                 if (pr.labels.includes(whitelistLabel)) {
-                  const pull_number = pr.number;
                   console.log(`Updating PR #${pull_number}`);
                   github.pulls.updateBranch({owner, repo, pull_number});
+                } else {
+                  console.log(`Skipping PR #${pull_number} since it does not have the '${whitelistLabel}' tag.`);
+                  console.log(pr.labels);
                 }
               }
             })
