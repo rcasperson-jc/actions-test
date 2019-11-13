@@ -1,0 +1,33 @@
+name: Update PR Branches
+on:
+  push:
+    branches:
+      - master
+      - krypton-daily
+
+jobs:
+  update-prs:
+    name: Update PR Branches
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@0.2.0
+        with:
+          github-token: ${{github.token}}
+          script: |
+            const whitelistLabel = "auto-update";
+            let [owner, repo] = context.payload.repository.full_name.split("/");
+
+            github.pulls.list({owner, repo})
+              .then(res => {
+                const prs = res.data;
+                for (const pr of prs) {
+                  const pull_number = pr.number;
+                  const prLabelNames = pr.labels.map(label => label.name);
+                  if (prLabelNames.includes(whitelistLabel)) {
+                    console.log(`Updating PR #${pull_number}`);
+                    github.pulls.updateBranch({owner, repo, pull_number});
+                  } else {
+                    console.log(`Skipping PR #${pull_number} since it does not have the '${whitelistLabel}' tag.`);
+                  }
+                }
+              })
