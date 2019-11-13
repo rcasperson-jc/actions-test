@@ -89,6 +89,7 @@ jobs:
         with:
           github-token: ${{github.token}}
           script: |
+            const whitelistLabel = "auto-update";
             const owner = context.repo.owner;
             const repo = context.repo.repo;
 
@@ -96,11 +97,10 @@ jobs:
             .then(res => {
               const prs = res.data;
               for (const pr of prs) {
-                console.log(prs);
-                process.exit(1);
-
-                const pull_number = pr.number;
-                console.log(`Updating PR #${pull_number}`);
-                github.pulls.updateBranch({owner, repo, pull_number});
+                if (pr.labels.includes(whitelistLabel)) {
+                  const pull_number = pr.number;
+                  console.log(`Updating PR #${pull_number}`);
+                  github.pulls.updateBranch({owner, repo, pull_number});
+                }
               }
             })
