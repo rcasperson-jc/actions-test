@@ -99,7 +99,6 @@ jobs:
               for (const pr of prs) {
                 const pull_number = pr.number;
                 const prLabelNames = pr.labels.map(label => label.name);
-                console.log(prLabelNames);
                 if (prLabelNames.includes(whitelistLabel)) {
                   console.log(`Updating PR #${pull_number}`);
                   github.pulls.updateBranch({owner, repo, pull_number});
