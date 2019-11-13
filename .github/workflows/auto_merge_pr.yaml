@@ -103,6 +103,7 @@ jobs:
                   github.pulls.updateBranch({owner, repo, pull_number});
                 } else {
                   console.log(`Skipping PR #${pull_number} since it does not have the '${whitelistLabel}' tag.`);
+                  console.log(pr.labels);
                 }
               }
             })
