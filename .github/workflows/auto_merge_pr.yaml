@@ -96,6 +96,9 @@ jobs:
             .then(res => {
               const prs = res.data;
               for (const pr of prs) {
+                console.log(prs);
+                process.exit(1);
+
                 const pull_number = pr.number;
                 console.log(`Updating PR #${pull_number}`);
                 github.pulls.updateBranch({owner, repo, pull_number});
