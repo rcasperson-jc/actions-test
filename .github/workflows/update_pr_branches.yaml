@@ -16,9 +16,9 @@ jobs:
           script: |
             const whitelistLabel = "auto-update";
             let [owner, repo] = context.payload.repository.full_name.split("/");
-            console.log(context.payload);
-            process.exit(1);
-            const pushedBranch = 1;
+            const pushedBranch = context.payload.ref.split("/")[-1];
+
+            // Duplicate Code
 
             github.pulls.list({owner, repo})
               .then(res => {
@@ -26,21 +26,17 @@ jobs:
                 for (const pr of prs) {
                   const pull_number = pr.number;
                   const prLabelNames = pr.labels.map(label => label.name);
-                  if (prLabelNames.includes(whitelistLabel)) {
-                    let mergeableState = pr.mergeable_state;
+                  const prBaseBranch = pr.base.ref
 
-                    if (mergeableState== "behind") {
-                      console.log(`Updating PR #${pull_number}`);
-                      github.pulls.updateBranch({owner, repo, pull_number});
-                    } else {
-                      console.log(pr);
-                      console.log(`Skipping PR #${pull_number} since it is not out of date. Current PR state: '${mergeableState}'`);
-                    }
-                  } else {
-                    // This relies on the mergeable_state value of "behind" overriding
-                    // all other states. I am sure that it shows if a PR is both "behind" and "blocked",
-                    // but I am not certain other states will override it.
+                  if (!(pushedBranch == prBaseBranch)) {
+                    console.log(`Skipping PR #${pull_number} since its base branch was not updated. Actual base branch: '${prBaseBranch}'`);
+                    continue;
+                  } else if (!prLabelNames.includes(whitelistLabel)) {
                     console.log(`Skipping PR #${pull_number} since it does not have the '${whitelistLabel}' tag.`);
+                    continue
                   }
+
+                  console.log(`Updating PR #${pull_number}`);
+                  github.pulls.updateBranch({owner, repo, pull_number});
                 }
               })
