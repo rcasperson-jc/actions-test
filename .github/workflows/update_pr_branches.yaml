@@ -16,7 +16,9 @@ jobs:
           script: |
             const whitelistLabel = "auto-update";
             let [owner, repo] = context.payload.repository.full_name.split("/");
-            const pushedBranch = context.payload.ref.split("/")[-1];
+            const refParts = context.payload.ref.split("/")
+            const pushedBranch = refParts[refParts.length - 1];
+            console.log(pushedBranch);
 
             // Duplicate Code
 
@@ -27,10 +29,6 @@ jobs:
                   const pull_number = pr.number;
                   const prLabelNames = pr.labels.map(label => label.name);
                   const prBaseBranch = pr.base.ref
-
-                  console.log(pushedBranch);
-                  console.log(context.payload.ref);
-                  console.log(context.payload.ref.split("/"));
 
                   if (pushedBranch !== prBaseBranch) {
                     console.log(`Skipping PR #${pull_number} since its base branch was not updated. Actual base branch: '${prBaseBranch}'`);
