@@ -94,7 +94,7 @@ jobs:
             const repo = context.repo.repo;
 
             // Give PRs a chance to see if they are out of date after the push
-            setTimeout(x => {}, 5000);
+            setTimeout(x => {}, 10000);
 
             github.pulls.list({owner, repo})
             .then(res => {
@@ -113,7 +113,7 @@ jobs:
                   // This relies on the mergeable_state value of "behind" overriding
                   // all other states. I am sure that it shows if a PR is both "behind" and "blocked",
                   // but I am not certain other states will override it.
-                  console.log(`Skipping PR #${pull_number} since it does not have the '${whitelistLabel}' tag. Current PR state: '${pr.mergeable_state}'`);
+                  console.log(`Skipping PR #${pull_number} since it does not have the '${whitelistLabel}' tag.`);
                 }
               }
             })
