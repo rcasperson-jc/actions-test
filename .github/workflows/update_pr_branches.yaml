@@ -28,7 +28,9 @@ jobs:
                   const prLabelNames = pr.labels.map(label => label.name);
                   const prBaseBranch = pr.base.ref
 
-                  if (!(pushedBranch == prBaseBranch)) {
+                  console.log(pushedBranch)
+
+                  if (pushedBranch !== prBaseBranch) {
                     console.log(`Skipping PR #${pull_number} since its base branch was not updated. Actual base branch: '${prBaseBranch}'`);
                     continue;
                   } else if (!prLabelNames.includes(whitelistLabel)) {
