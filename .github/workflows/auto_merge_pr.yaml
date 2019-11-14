@@ -100,7 +100,6 @@ jobs:
                 // This job wouldn't even trigger if there weren't any Pull Requests for the check_suite.
                 pushedBranch = context.payload.check_suite.pull_requests[0].base.ref;
               };
-            console.log(pushedBranch);
 
             // Duplicate Code
 
