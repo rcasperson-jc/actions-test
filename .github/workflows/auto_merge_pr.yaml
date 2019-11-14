@@ -100,10 +100,17 @@ jobs:
                 const pull_number = pr.number;
                 const prLabelNames = pr.labels.map(label => label.name);
                 if (prLabelNames.includes(whitelistLabel)) {
-                  console.log(`Updating PR #${pull_number}`);
-                  github.pulls.updateBranch({owner, repo, pull_number});
+                  if (pr.mergeable_state == "behind") {
+                    console.log(`Updating PR #${pull_number}`);
+                    github.pulls.updateBranch({owner, repo, pull_number});
+                  } else {
+                    console.log(`Skipping PR #${pull_number} since it is not out of date. Current PR state: '${pr.mergeable_state}'`);
+                  }
                 } else {
-                  console.log(`Skipping PR #${pull_number} since it does not have the '${whitelistLabel}' tag.`);
+                  // This relies on the mergeable_state value of "behind" overriding
+                  // all other states. I am sure that it shows if a PR is both "behind" and "blocked",
+                  // but I am not certain other states will override it.
+                  console.log(`Skipping PR #${pull_number} since it does not have the '${whitelistLabel}' tag. Current PR state: '${pr.mergeable_state}'`);
                 }
               }
             })
