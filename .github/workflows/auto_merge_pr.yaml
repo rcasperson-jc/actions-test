@@ -93,9 +93,6 @@ jobs:
             const owner = context.repo.owner;
             const repo = context.repo.repo;
 
-            // Give PRs a chance to see if they are out of date after the push
-            setTimeout(x => {}, 10000);
-
             github.pulls.list({owner, repo})
             .then(res => {
               const prs = res.data;
