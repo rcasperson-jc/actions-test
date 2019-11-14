@@ -92,9 +92,16 @@ jobs:
             const whitelistLabel = "auto-update";
             const owner = context.repo.owner;
             const repo = context.repo.repo;
-            console.log(context.payload);
-            process.exit(1);
-            const pushedBranch = 1;
+
+            let pushedBranch;
+              if (context.payload.pull_request) {
+                pushedBranch = context.payload.pull_request.base.ref;
+              } else if (context.payload.check_suite) {
+                let prs = context.payload.check_suite.pull_requests;
+                # This job wouldn't even trigger if there weren't any Pull Requests for the check_suite.
+                pushedBranch = context.payload.check_suite.pull_requests[0].base.ref;
+              };
+            console.log(pushedBranch);
 
             // Duplicate Code
 
