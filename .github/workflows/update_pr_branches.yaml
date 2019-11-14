@@ -16,6 +16,9 @@ jobs:
           script: |
             const whitelistLabel = "auto-update";
             let [owner, repo] = context.payload.repository.full_name.split("/");
+            console.log(context.payload);
+            process.exit(1);
+            const pushedBranch = 1;
 
             github.pulls.list({owner, repo})
               .then(res => {
@@ -25,13 +28,6 @@ jobs:
                   const prLabelNames = pr.labels.map(label => label.name);
                   if (prLabelNames.includes(whitelistLabel)) {
                     let mergeableState = pr.mergeable_state;
-
-                    if (mergeableState == undefined) {
-                      github.pulls.get({owner, repo, pull_number})
-                      .then(res => {
-                         mergeableState = res.data.mergeable_state;
-                      })
-                    }
 
                     if (mergeableState== "behind") {
                       console.log(`Updating PR #${pull_number}`);
