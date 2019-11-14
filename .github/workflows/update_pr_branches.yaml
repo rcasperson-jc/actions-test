@@ -28,6 +28,7 @@ jobs:
                       console.log(`Updating PR #${pull_number}`);
                       github.pulls.updateBranch({owner, repo, pull_number});
                     } else {
+                      console.log(pr);
                       console.log(`Skipping PR #${pull_number} since it is not out of date. Current PR state: '${pr.mergeable_state}'`);
                     }
                   } else {
