@@ -132,6 +132,6 @@ jobs:
                     console.log(`An error occurred while attempting to update PR #${pull_number}: ${e}`);
                     continue
                   }
+                  console.log(`Successfully updated PR #${pull_number}`);
                 }
-                console.log(`Successfully updated PR #${pull_number}`);
               })
