@@ -80,7 +80,7 @@ jobs:
               pull_number = context.payload.check_suite.pull_requests[0].number;
             };
 
-             github.pulls.get({owner, repo, pull_number})
+            github.pulls.get({owner, repo, pull_number})
             .then(pr => {
               const ref = `heads/${pr.data.head.ref}`;
               github.git.deleteRef({owner, repo, ref});
@@ -126,15 +126,10 @@ jobs:
                     continue
                   }
 
-                  let error;
-                  github.pulls.updateBranch({owner, repo, pull_number}).catch(e => {
+                  console.log(`Updating PR #${pull_number}`);
+                  github.pulls.updateBranch({owner, repo, pull_number})
+                  .catch(e => {
                     console.log(`An error occurred while attempting to update PR #${pull_number}: ${e}`);
-                    process.exit(2);
-                  })
-                  if (error) {
-                    console.log(`An error occurred while attempting to update PR #${pull_number}: ${error}`);
-                  } else {
-                    console.log(`Successfully updated PR #${pull_number}`);
-                  }
+                  });
                 }
               })
