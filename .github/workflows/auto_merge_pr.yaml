@@ -17,7 +17,7 @@ jobs:
         with:
           github-token: ${{github.token}}
           script: |
-            const whitelistLabel = "auto-update";
+            const whitelistLabel = "auto-merge";
             const owner = context.repo.owner;
             const repo = context.repo.repo;
 
@@ -35,6 +35,7 @@ jobs:
 
             github.pulls.get({owner, repo, pull_number})
               .then(pr => {
+                console.log(pr);
                 const prLabelNames = pr.labels.map(label => label.name);
                 if (!prLabelNames.includes(whitelistLabel)) {
                   console.log(`Cannot auto-merge PR #${pull_number} because it does not have the '${whitelistLabel}' tag.`);
