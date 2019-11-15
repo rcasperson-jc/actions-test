@@ -29,7 +29,7 @@ jobs:
                   const prLabelNames = pr.labels.map(label => label.name);
                   const prBaseBranch = pr.base.ref
 
-                  if (pushedBranch !== prBaseBranch) {
+                  if (!(pushedBranch == prBaseBranch)) {
                     console.log(`Skipping PR #${pull_number} since its base branch was not updated. Actual base branch: '${prBaseBranch}'`);
                     continue;
                   } else if (!prLabelNames.includes(whitelistLabel)) {
@@ -37,7 +37,12 @@ jobs:
                     continue
                   }
 
-                  console.log(`Updating PR #${pull_number}`);
-                  github.pulls.updateBranch({owner, repo, pull_number});
+                  try {
+                    github.pulls.updateBranch({owner, repo, pull_number});
+                  } catch(e) {
+                    console.log(`An error occurred while attempting to update PR #${pull_number}: ${e}`);
+                    continue
+                  }
                 }
+                console.log(`Successfully updated PR #${pull_number}`);
               })
