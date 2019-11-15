@@ -1,8 +1,10 @@
 name: Auto-merge PR
 
 # NOTE: The check_suite trigger doesn't work after it is rerun
-# after the branch is automatically updated
-# https://github.community/t5/GitHub-Actions/Check-Suite-created-by-a-Workflow-doesn-t-complete-even-though/td-p/33390
+# after the branch is automatically updated with a GitHUb action.
+# There is currently no workaround in place, so this workflow only triggers
+# on PR reviews and completions of check suites that were triggered by a human (push, UI action, etc.).
+# related to: https://github.community/t5/GitHub-Actions/pull-request-action-does-not-run-on-merge/m-p/37559#M3000
 on:
   pull_request_review:
   check_suite:
@@ -80,15 +82,21 @@ jobs:
               pull_number = context.payload.check_suite.pull_requests[0].number;
             };
 
-             github.pulls.get({owner, repo, pull_number})
+            github.pulls.get({owner, repo, pull_number})
             .then(pr => {
               const ref = `heads/${pr.data.head.ref}`;
               github.git.deleteRef({owner, repo, ref});
             });
 
+  # This job is duplicated by the separate Update PR Branches workflow,
+  # and it shares some of the same logic (duplicated exactly for now).
+  # Ideally we only need the separate workflow to trigger when any push happens to
+  # those protected branches, but the push from this GitHub action's PR merge
+  # does not trigger that Update PR Branches workflow due to a possible bug in GitHub
+  # Actions. If that is resolved, this job in this workflow can be deleted.
+  # https://github.community/t5/GitHub-Actions/pull-request-action-does-not-run-on-merge/m-p/37559#M3000
   update-prs:
     name: Update PR Branches
-    # Update other PRs after a PR merges
     needs: merge-pr
     runs-on: ubuntu-latest
     steps:
@@ -127,6 +135,9 @@ jobs:
                   }
 
                   console.log(`Updating PR #${pull_number}`);
-                  github.pulls.updateBranch({owner, repo, pull_number});
+                  github.pulls.updateBranch({owner, repo, pull_number})
+                  .catch(e => {
+                    console.log(`  - An error occurred while attempting to update PR #${pull_number}: ${e}`);
+                  });
                 }
               })
