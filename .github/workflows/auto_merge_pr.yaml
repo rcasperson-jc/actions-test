@@ -127,7 +127,10 @@ jobs:
                   }
 
                   let error;
-                  github.pulls.updateBranch({owner, repo, pull_number}).catch(e => {error = e})
+                  github.pulls.updateBranch({owner, repo, pull_number}).catch(e => {
+                    console.log(`An error occurred while attempting to update PR #${pull_number}: ${e}`);
+                    process.exit(2);
+                  })
                   if (error) {
                     console.log(`An error occurred while attempting to update PR #${pull_number}: ${error}`);
                   } else {
