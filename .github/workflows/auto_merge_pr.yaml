@@ -35,8 +35,7 @@ jobs:
 
             github.pulls.get({owner, repo, pull_number})
               .then(pr => {
-                console.log(pr);
-                const prLabelNames = pr.labels.map(label => label.name);
+                const prLabelNames = pr.data.labels.map(label => label.name);
                 if (!prLabelNames.includes(whitelistLabel)) {
                   console.log(`Cannot auto-merge PR #${pull_number} because it does not have the '${whitelistLabel}' tag.`);
                   process.exit(1);
