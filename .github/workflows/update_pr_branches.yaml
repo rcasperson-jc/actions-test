@@ -37,12 +37,12 @@ jobs:
                     continue
                   }
 
-                  try {
-                    github.pulls.updateBranch({owner, repo, pull_number});
-                  } catch(e) {
-                    console.log(`An error occurred while attempting to update PR #${pull_number}: ${e}`);
-                    continue
+                  let error;
+                  github.pulls.updateBranch({owner, repo, pull_number}).catch(e => {error = e})
+                  if (error) {
+                    console.log(`An error occurred while attempting to update PR #${pull_number}: ${error}`);
+                  } else {
+                    console.log(`Successfully updated PR #${pull_number}`);
                   }
-                  console.log(`Successfully updated PR #${pull_number}`);
                 }
               })
